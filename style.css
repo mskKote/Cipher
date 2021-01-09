@@ -1,0 +1,69 @@
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.wrapper {
+    margin: auto;
+    text-align: center;
+    align-items: center;
+}
+
+.wrapper-margin {
+    margin-top: 3rem;
+}
+
+input {
+    background: white;
+    border-radius: 10px;
+    border: 2.25px solid black;
+    width: 30rem;
+    height: 1.25rem;
+    padding: 0.1rem;
+    padding-left: 1rem;
+    outline: none;
+}
+
+input.checkValues {
+    border: none;
+}
+
+
+.glass {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 10px;
+}
+
+input.correct {
+    color: #45B39D;
+}
+
+input.correct-top {
+    border: 2.25px solid #45B39D;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom:1.125px solid #45B39D;
+}
+input.correct-down {
+    border: 2.25px solid #45B39D;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: 1.125px solid #45B39D;
+    color: #45B39D;
+}
+
+input.error-top {
+    border: 2.25px solid red;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom:1.125px solid red;
+}
+input.error-down {
+    border: 2.25px solid red;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: 1.125px solid red;
+    color: red;
+}

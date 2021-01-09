@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Bill Cipher</title>
+	<script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
+
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div class="wrapper">
+		<div class="wrapper-margin">
+			<p>key: <span id="key" style="color: #45B39D"></span></p>
+		</div>
+		<div class="wrapper-margin">
+			<input type="text" id="URL" ondblclick="clearValue(event)" oninput="onInputURL(event)"
+				placeholder="Введите URL" autofocus="true" />
+		</div>
+		<div>
+			<input id="checkDecrypt" class="checkValues" disabled placeholder="Проверка дешифровкой" />
+		</div>
+		<div class="wrapper-margin">
+			<input id="encoded" style="visibility: hidden" class="checkValues glass" disabled placeholder="ENCODED" />
+		</div>
+	</div>
+	<script type="text/javascript">
+		// Текст
+		const encodedInput = document.getElementById("encoded");
+		const checkDecryptInput = document.getElementById("checkDecrypt");
+		const URL = document.getElementById("URL");
+		const key = document.getElementById("key");
+
+		// Очищаем значения ради удобства
+		function clearValue() {
+			URL.value = '';
+			encodedInput.value = '';
+			checkDecryptInput.value = '';
+		}
+
+		function onInputURL($event) {
+			const encryptedHex = encrypt(event.target.value, key_128);
+			const checkDecrypt = decrypt(encryptedHex, key_128);
+
+			const resultCheck = event.target.value === checkDecrypt;
+			checkDecryptInput.value = checkDecrypt;
+			encodedInput.value = encryptedHex;
+
+			if (!resultCheck) {
+				checkDecryptInput.value = "[ERROR] URL не одинаковы!!!";
+				URL.setAttribute('class', 'error-top');
+				encodedInput.style = "visibility: hidden";
+				checkDecryptInput.setAttribute('class', 'checkValues error-down');
+			} else {
+				URL.setAttribute('class', 'correct-top');
+				encodedInput.style = "visibility: visible";
+				checkDecryptInput.setAttribute('class', 'checkValues correct-down');
+			}
+
+			return resultCheck;
+		}
+
+		//---------------------------------------------------------------ШИФРОВАНИЕ
+		const key_128 = new Array(16).fill(0)
+			.map(x => x = Math.ceil(Math.random() * 256));
+		key.innerHTML = `new byte[] {${key_128.map(x => x - 128).join(', ')}}`;
+
+		//* Зашифровать
+		function encrypt(text, key) {
+			const textBytes = aesjs.utils.utf8.toBytes(text);
+			const encryptedBytes = new aesjs.ModeOfOperation.ctr(key).encrypt(textBytes);
+			// To print or store the binary data, you may convert it to hex
+			const encryptedHex = aesjs.utils.hex.fromBytes(encryptedBytes);
+			// console.log(encryptedHex); // Возвращает что-то в духе:
+			// "a338eda3874ed884b6199150d36f49988c90f5c47fe7792b0cf8c7f77eeffd87
+			//  ea145b73e82aefcf2076f881c88879e4e25b1d7b24ba2788"
+			return encryptedHex;
+		}
+
+		//* Расшифровать
+		function decrypt(hex, key) {
+			// When ready to decrypt the hex string, convert it back to bytes
+			const encryptedBytes = aesjs.utils.hex.toBytes(hex);
+			// The counter mode of operation maintains internal state, so to
+			// decrypt a new instance must be instantiated.
+			const decryptedBytes = new aesjs.ModeOfOperation.ctr(key).decrypt(encryptedBytes);
+			// Convert our bytes back into text
+			const decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes);
+			return decryptedText;
+		}
+			//-------------------------------------------------------------------------
+	</script>
+</body>
+
+</html>
